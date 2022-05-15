@@ -1,30 +1,26 @@
 const router = require('express').Router();
 
-const fs = require('fs');
+const fsPromises = require('fs').promises;
 
 const path = require('path');
 
+const filePath = path.join(__dirname, '../data/users.json');
+
 router.get('/users', (req, res) => {
-  fs.readFile(
-    path.join(__dirname, '../data/users.json'),
-    { encoding: 'utf8' },
-    (err, data) => {
-      if (err) {
-        console.log(err);
-      }
+  fsPromises
+    .readFile(filePath, { encoding: 'utf-8' })
+    .then((data) => {
       res.status(404).send(JSON.parse(data));
-    },
-  );
+    })
+    .catch(() => {
+      res.status(500).send({ message: 'An error has occurred on the server' });
+    });
 });
 
 router.get('/users/:id', (req, res) => {
-  fs.readFile(
-    path.join(__dirname, '../data/users.json'),
-    { encoding: 'utf8' },
-    (err, data) => {
-      if (err) {
-        console.log(err);
-      }
+  fsPromises
+    .readFile(filePath, { encoding: 'utf8' })
+    .then((data) => {
       const users = JSON.parse(data);
       users.map((user) => {
         if (user._id === req.params.id) {
@@ -32,8 +28,10 @@ router.get('/users/:id', (req, res) => {
         }
       });
       res.status(404).send({ message: 'User ID not found' });
-    },
-  );
+    })
+    .catch(() => {
+      res.status(500).send({ message: 'An error has occurred on the server' });
+    });
 });
 
 module.exports = router;

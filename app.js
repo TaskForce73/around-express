@@ -1,10 +1,13 @@
 const express = require('express');
+const helmet = require('helmet');
 const cardsRouter = require('./routes/cards');
 const usersRouter = require('./routes/users');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
+
+app.use(helmet());
 
 app.use('/', usersRouter);
 

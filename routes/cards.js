@@ -1,20 +1,19 @@
 const router = require('express').Router();
 
-const fs = require('fs');
+const fsPromises = require('fs').promises;
 
 const path = require('path');
 
+const filePath = path.join(__dirname, '../data/cards.json');
+
 router.get('/', (req, res) => {
-  fs.readFile(
-    path.join(__dirname, '../data/cards.json'),
-    { encoding: 'utf8' },
-    (err, data) => {
-      if (err) {
-        console.log(err);
-      }
-      res.status(400).send(JSON.parse(data));
-    },
-  );
+ fsPromises.readFile(filePath, { encoding: 'utf-8' })
+    .then((data) => {
+      res.status(404).send(JSON.parse(data));
+    })
+    .catch(() => {
+      res.status(500).send({ message: 'An error has occurred on the server' });
+    });
 });
 
 module.exports = router;
