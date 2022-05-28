@@ -13,12 +13,19 @@ app.use(helmet());
 
 mongoose.connect('mongodb://localhost:27017/aroundb');
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: '628a3ae0b2759769ce372975',
+  };
+  next();
+});
+
 app.use('/users', require('./routes/users'));
 
-//app.use('/cards', require('./routes/cards'));
+app.use('/cards', require('./routes/cards'));
 
-app.get('*' , (req, res) => {
-res.status(404).send({ message: 'Requested resource not found' });
+app.get('*', (req, res) => {
+  res.status(404).send({ message: 'Requested resource not found' });
 });
 
 app.listen(PORT, () => {
