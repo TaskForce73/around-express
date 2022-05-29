@@ -1,4 +1,5 @@
 const Card = require('../models/card');
+const handleError = require('../utils/error');
 
 module.exports.getCards = (req, res) => {
   Card.find({})
@@ -34,16 +35,7 @@ module.exports.deleteCard = (req, res) => {
       res.status(200).send({ data: card });
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'NotValid Data' });
-      }
-      if (err.name === 'DocumentNotFoundError') {
-        res.status(404).send({ message: 'User not found' });
-      } else {
-        res
-          .status(500)
-          .send({ message: 'An error has occurred on the server' });
-      }
+      handleError(err, res);
     });
 };
 
@@ -58,16 +50,7 @@ module.exports.likeCard = (req, res) => {
       res.status(200).send({ data: user });
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'NotValid Data' });
-      }
-      if (err.name === 'DocumentNotFoundError') {
-        res.status(404).send({ message: 'User not found' });
-      } else {
-        res
-          .status(500)
-          .send({ message: 'An error has occurred on the server' });
-      }
+      handleError(err, res);
     });
 };
 
@@ -82,17 +65,6 @@ module.exports.dislikeCard = (req, res) => {
       res.status(200).send({ data: user });
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'NotValid Data' });
-      }
-      if (err.name === 'DocumentNotFoundError') {
-        res.status(404).send({ message: 'User not found' });
-      } else {
-        res
-          .status(500)
-          .send({ message: 'An error has occurred on the server' });
-      }
+      handleError(err, res);
     });
 };
-
-//Hi! I want to say thanks for your explanation cause now it's much more easier to understand error handling concept. Also it's great to have an additional materials too! if it doesn't bother you: could i have a question please? I don't fully understand how to create a function to handle repetitive errors? Could you give me an example of such kind of function? Any example it's not even necessary to have a connection with my project. And also the question is: should I create a folder for this function or where it should located?Thanks in advance!

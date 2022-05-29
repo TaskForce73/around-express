@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const handleError = require('../utils/error');
 
 module.exports.getUsers = (req, res) => {
   User.find({})
@@ -17,16 +18,7 @@ module.exports.getUserById = (req, res) => {
       res.status(200).send({ data: userId });
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'NotValid Data' });
-      }
-      if (err.name === 'DocumentNotFoundError') {
-        res.status(404).send({ message: 'User not found' });
-      } else {
-        res
-          .status(500)
-          .send({ message: 'An error has occurred on the server' });
-      }
+      handleError(err, res);
     });
 };
 
